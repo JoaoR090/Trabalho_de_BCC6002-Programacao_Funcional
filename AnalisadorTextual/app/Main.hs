@@ -48,5 +48,3 @@ main = do
         Text -> return (source options)
       print options
       putStrLn content
-      print (contaPalavras content)
-      print (contaPalavra content "seu")
