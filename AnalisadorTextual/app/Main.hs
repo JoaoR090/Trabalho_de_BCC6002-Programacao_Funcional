@@ -1,6 +1,7 @@
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import System.IO (hPutStrLn, stderr)
+import TextProcessor
 
 data SourceType = File | Text
     deriving (Enum, Show, Eq)
@@ -47,3 +48,5 @@ main = do
         Text -> return (source options)
       print options
       putStrLn content
+      print (contaPalavras content)
+      print (contaPalavra content "seu")
