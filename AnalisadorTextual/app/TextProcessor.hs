@@ -42,3 +42,9 @@ normalizacao text = go text
 
 ordenacao :: Map.Map String Int -> [(String, Int)]
 ordenacao mapa = sortOn snd (Map.toList mapa)
+
+frequenciaRelativa :: [(String, Int)] -> Int -> [(String, Float)]
+frequenciaRelativa lista total = go lista total []
+    where
+        go [] total  frequencia = frequencia
+        go (x : rest) total frequencia = go rest total (frequencia ++ [((fst x), (fromIntegral(snd x)/ fromIntegral total))])
