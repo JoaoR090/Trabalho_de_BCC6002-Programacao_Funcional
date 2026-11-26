@@ -2,6 +2,7 @@ module TextProcessor where
 
 import qualified Data.Map as Map
 import Data.Char
+import Data.List (sortOn)
 
 contaPalavras :: String -> Int
 contaPalavras text = length (words text)
@@ -38,3 +39,6 @@ normalizacao text = go text
             | isSpace x = [x] ++ go rest 
             | isControl x = go rest
             | otherwise = go rest
+
+ordenacao :: Map.Map String Int -> [(String, Int)]
+ordenacao mapa = sortOn snd (Map.toList mapa)
