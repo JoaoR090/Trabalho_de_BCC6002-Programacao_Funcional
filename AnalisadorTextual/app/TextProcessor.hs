@@ -1,6 +1,7 @@
 module TextProcessor where
 
 import qualified Data.Map as Map
+import Data.Char
 
 contaPalavras :: String -> Int
 contaPalavras text = length (words text)
@@ -23,4 +24,17 @@ contaPalavraVezes :: String -> Map.Map String Int
 contaPalavraVezes texto = go (words texto) Map.empty
     where
         go [] mapa = mapa
-        go (x : rest) mapa | Map.lookup x mapa != Nothing = go rest mapa | otherwise = go rest (Map.insert x ((contaPalavra rest x) + 1) mapa)
+        go (x : rest) mapa | Map.lookup x mapa /= Nothing = go rest mapa | otherwise = go rest (Map.insert x ((contaPalavra rest x) + 1) mapa)
+
+normalizacao :: String -> String
+normalizacao text = go text
+    where 
+        go [] = ""
+        go (x : rest) 
+            | isPunctuation x = go rest 
+            | isNumber x = go rest 
+            | isUpper x = [toLower x] ++ go rest 
+            | isLower x = [x] ++ go rest 
+            | isSpace x = [x] ++ go rest 
+            | isControl x = go rest
+            | otherwise = go rest

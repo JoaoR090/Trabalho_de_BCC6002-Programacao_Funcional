@@ -40,7 +40,7 @@ main = do
   args <- getArgs
   case parseArgs args of
     Left err -> do
-      hPutStrLn stderr ("erro: " ++ err)
+      hPutStrLn stderr ("erro: " ++ err) 
       exitFailure
     Right options -> do
       content <- case sourceType options of
@@ -48,3 +48,7 @@ main = do
         Text -> return (source options)
       print options
       putStrLn content
+      let contentnormalizado = normalizacao content
+      print (contaPalavraVezes content)
+      putStrLn contentnormalizado
+      print (contaPalavraVezes contentnormalizado)
