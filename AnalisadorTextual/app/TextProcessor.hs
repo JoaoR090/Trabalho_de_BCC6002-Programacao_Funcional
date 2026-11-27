@@ -1,16 +1,16 @@
 module TextProcessor where
 
-import qualified Data.Map as Map
 import Data.Char
 import Data.List (sortOn)
+import Data.Ord (Down(..))
 
 contaPalavras :: String -> Int
-contaPalavras text = length (words text)
+contaPalavras texto = length (words texto)
 
 contaPalavra :: [String] -> String -> Int
-contaPalavra text palavra = go text palavra 0
+contaPalavra texto palavra = go texto palavra 0
     where
-        go [] palavra cont = cont
+        go [] _ cont = cont
         go (x : rest) palavra cont
             | x == palavra = go rest palavra (cont + 1)
             | otherwise = go rest palavra cont
@@ -21,30 +21,36 @@ removeStopWords texto stopwords = go (words stopwords) (words texto)
         go [] texto = unwords texto
         go (x : rest) texto = go rest (filter (/= x) texto)
 
-contaPalavraVezes :: String -> Map.Map String Int
-contaPalavraVezes texto = go (words texto) Map.empty
+contaPalavraVezes :: String -> [(String, Int)]
+contaPalavraVezes texto = go (words texto) []
     where
-        go [] mapa = mapa
-        go (x : rest) mapa | Map.lookup x mapa /= Nothing = go rest mapa | otherwise = go rest (Map.insert x ((contaPalavra rest x) + 1) mapa)
+        go [] lista = lista
+        go (x : rest) lista
+            | any (\(palavra, _) -> palavra == x) lista = go rest lista
+            | otherwise = go rest (lista ++ [(x, contaPalavra (x : rest) x)])
+
+ordenacaoFrequencia :: [(String, Int)] -> [(String, Int)]
+ordenacaoFrequencia lista = sortOn (Down . snd) lista
+
+ordenacaoLetra :: [(String, Int)] -> [(String, Int)]
+ordenacaoLetra lista = sortOn fst lista
 
 normalizacao :: String -> String
-normalizacao text = go text
-    where 
+normalizacao texto = go texto
+    where
         go [] = ""
-        go (x : rest) 
-            | isPunctuation x = go rest 
-            | isNumber x = go rest 
-            | isUpper x = [toLower x] ++ go rest 
-            | isLower x = [x] ++ go rest 
-            | isSpace x = [x] ++ go rest 
+        go (x : rest)
+            | isPunctuation x = go rest
+            | isNumber x = go rest
+            | isUpper x = toLower x : go rest
+            | isLower x = x : go rest
+            | isSpace x = x : go rest
             | isControl x = go rest
             | otherwise = go rest
 
-ordenacao :: Map.Map String Int -> [(String, Int)]
-ordenacao mapa = sortOn snd (Map.toList mapa)
-
 frequenciaRelativa :: [(String, Int)] -> Int -> [(String, Float)]
-frequenciaRelativa lista total = go lista total []
+frequenciaRelativa _ 0 = []
+frequenciaRelativa lista total = go lista []
     where
-        go [] total  frequencia = frequencia
-        go (x : rest) total frequencia = go rest total (frequencia ++ [((fst x), (fromIntegral(snd x)/ fromIntegral total))])
+        go [] frequencia = reverse frequencia
+        go (x : rest) frequencia = go rest ((fst x, fromIntegral (snd x) / fromIntegral total) : frequencia)

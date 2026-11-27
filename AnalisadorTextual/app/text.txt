@@ -1,1 +1,2 @@
-Hoje o dia está bonito e o sol brilha no céu. João acordou cedo, tomou café e saiu para caminhar. No caminho, encontrou um amigo e conversaram sobre livros, música e tecnologia. Depois, voltou para casa, ligou o computador e começou a estudar programação.
+Hoje o dia está bonito e o sol brilha no céu. João acordou cedo, tomou café e saiu para caminhar. No caminho, encontrou um amigo e conversaram sobre livros,
+música e tecnologia. Depois, voltou para casa, ligou o computador e começou a estudar programação.
